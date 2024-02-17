@@ -5,20 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.harshul.shoesapp.R
-import com.harshul.shoesapp.data.models.Brand
 import com.harshul.shoesapp.data.models.Shoe
+import com.harshul.shoesapp.data.pagination.ShoesLoadStateAdapter
 import com.harshul.shoesapp.databinding.FragmentDisplayShoesBinding
 import com.harshul.shoesapp.ui.adapter.ShoeAdapter
 import com.harshul.shoesapp.ui.adapter.ShoeListener
+import com.harshul.shoesapp.ui.view.viewmodel.MainViewModel
 import com.harshul.shoesapp.utils.lightTheme
 import com.harshul.shoesapp.utils.setSpannableTxt
-import kotlin.random.Random
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DisplayShoesFragment : Fragment(), ShoeListener {
 
     private lateinit var binding: FragmentDisplayShoesBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,60 +43,15 @@ class DisplayShoesFragment : Fragment(), ShoeListener {
         requireActivity().lightTheme()
         binding.tvName.setSpannableTxt(getString(R.string.hello), R.color.light_grey, 4, 7)
 
-        binding.rvShoes.adapter = ShoeAdapter(dummyData(), this)
-//        binding.rvShoes.apply {
-//            layoutManager = GridLayoutManager(context, 2)
-//        }
+        val shoeAdapter = ShoeAdapter(listener = this)
+        binding.rvShoes.adapter = shoeAdapter.withLoadStateFooter(ShoesLoadStateAdapter())
 
-    }
-
-    //todo: to be removed
-    private fun dummyData(): MutableList<Shoe> {
-        val dummyShoes = mutableListOf<Shoe>()
-
-        val imagesList = listOf(
-            "https://i.ibb.co/5hCfpCP/1-nike.png",
-            "https://i.ibb.co/xqNPyVg/22-addidas.png",
-            "https://i.ibb.co/xXx8YHc/15-puma.png",
-            "https://i.ibb.co/606WD8s/2-nike.png",
-            "https://i.ibb.co/v3CSRXy/3-nike.png",
-            "https://i.ibb.co/7ndGwZN/16-puma.png",
-            "https://i.ibb.co/7z9KTV9/19-addidas.png",
-            "https://i.ibb.co/r5PVkBb/4-nike.png",
-            "https://i.ibb.co/7xc51CH/5-nike.png",
-            "https://i.ibb.co/KjTvcS6/17-puma.png",
-            "https://i.ibb.co/v3CSRXy/3-nike.png",
-            "https://i.ibb.co/yyTrjDG/7-nike.png",
-            "https://i.ibb.co/Pmbbh3p/8-nike.png",
-            "https://i.ibb.co/10QjQ4c/21-addidas.png",
-            "https://i.ibb.co/yfNXvtF/20-addidas.png",
-            "https://i.ibb.co/yhVtXQG/9-nike.png",
-            "https://i.ibb.co/fd1nWtx/10-nike.png",
-            "https://i.ibb.co/w0tQFTY/11-nike.png",
-            "https://i.ibb.co/zNMvRM6/12-nike.png",
-            "https://i.ibb.co/5vs1ZnP/18-puma.png",
-            "https://i.ibb.co/Hn0QZyc/13-nike.png",
-            "https://i.ibb.co/Wyxzwkt/14-nike.png",
-        )
-
-        imagesList.forEachIndexed { index, shoeUrl ->
-            val shoeBrand =
-                if (shoeUrl.contains("nike")) Brand.NIKE else if (shoeUrl.contains("addidas")) Brand.ADIDAS else Brand.PUMA
-            val currPrice = (3000..20000).random()
-            dummyShoes.add(
-                Shoe(
-                    name = "${shoeBrand.name} $index",
-                    category = (1..3).random(),
-                    brand = shoeBrand.id,
-                    currPrice = currPrice,
-                    actualPrice = (currPrice * Random.nextDouble(1.0, 2.5)).toInt(),
-                    rating = Random.nextDouble(3.0, 5.0),
-                    imageUrl = shoeUrl
-                )
-            )
+        lifecycleScope.launch {
+            viewModel.data.collectLatest {
+                shoeAdapter.submitData(it)
+            }
         }
 
-        return dummyShoes
     }
 
     override fun onShoeClick(shoeDetail: Shoe) {

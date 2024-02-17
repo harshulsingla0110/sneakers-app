@@ -2,6 +2,8 @@ package com.harshul.shoesapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.harshul.shoesapp.data.models.Gender
@@ -9,9 +11,18 @@ import com.harshul.shoesapp.data.models.Shoe
 import com.harshul.shoesapp.databinding.ItemShoeBinding
 
 class ShoeAdapter(
-    private val shoesList: List<Shoe>,
     private val listener: ShoeListener
-) : RecyclerView.Adapter<ShoeAdapter.MyViewHolder>() {
+) : PagingDataAdapter<Shoe, ShoeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Shoe>() {
+            override fun areItemsTheSame(oldItem: Shoe, newItem: Shoe): Boolean =
+                oldItem.shoeId == newItem.shoeId
+
+            override fun areContentsTheSame(oldItem: Shoe, newItem: Shoe): Boolean =
+                oldItem == newItem
+        }
+    }
 
     inner class MyViewHolder(private val binding: ItemShoeBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,10 +45,8 @@ class ShoeAdapter(
         return MyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = shoesList.size
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(shoesList[position])
+        getItem(position)?.let { holder.bind(it) }
     }
 }
 
