@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ShoesApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="intro_screen_details_str">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id egestas purus. Suspendisse tincidunt nulla.</string>
+    <string name="hello">Hi, Joe! 👋</string>
+    <string name="find_best_shoes">Find Your Best Shoes Here</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="favourites">Favourites</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="shoe_detail_desc">The Air Jordan 1 Mid is a classic sneaker silhouette that offers a timeless blend of style and comfort.</string>
+</resources>

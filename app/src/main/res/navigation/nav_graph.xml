@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/introScreenFragment">
+
+    <fragment
+        android:id="@+id/introScreenFragment"
+        android:name="com.harshul.shoesapp.ui.view.fragments.IntroScreenFragment"
+        android:label="fragment_intro_screen"
+        tools:layout="@layout/fragment_intro_screen" >
+        <action
+            android:id="@+id/action_introScreenFragment_to_displayShoesFragment"
+            app:destination="@id/displayShoesFragment"
+            app:popUpTo="@id/introScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayShoesFragment"
+        android:name="com.harshul.shoesapp.ui.view.fragments.DisplayShoesFragment"
+        android:label="fragment_display_shoes"
+        tools:layout="@layout/fragment_display_shoes" >
+        <action
+            android:id="@+id/action_displayShoesFragment_to_shoeDetailFragment"
+            app:destination="@id/shoeDetailFragment" />
+        <action
+            android:id="@+id/action_displayShoesFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoeDetailFragment"
+        android:name="com.harshul.shoesapp.ui.view.fragments.ShoeDetailFragment"
+        android:label="fragment_shoe_detail"
+        tools:layout="@layout/fragment_shoe_detail" >
+        <action
+            android:id="@+id/action_shoeDetailFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+        <argument
+            android:name="shoeDetail"
+            app:argType="com.harshul.shoesapp.data.models.Shoe"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.harshul.shoesapp.ui.view.fragments.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_displayShoesFragment"
+            app:destination="@id/displayShoesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteShoesFragment"
+        android:name="com.harshul.shoesapp.ui.view.fragments.FavouriteShoesFragment"
+        android:label="fragment_favourite_shoes"
+        tools:layout="@layout/fragment_favourite_shoes" >
+        <action
+            android:id="@+id/action_favouriteShoesFragment_to_shoeDetailFragment"
+            app:destination="@id/shoeDetailFragment" />
+    </fragment>
+</navigation>

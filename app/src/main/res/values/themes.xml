@@ -1,0 +1,25 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ShoesApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/main_orange</item>
+        <item name="colorPrimaryVariant">@color/main_orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:itemTextAppearance">@style/BottomNavSelectedTextStyle</item> <!--menu item styling top bar-->
+    </style>-++++
+
+    <style name="Theme.ShoesApp" parent="Base.Theme.ShoesApp" />
+
+    <style name="BottomNavSelectedTextStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">@dimen/sixteen_sp</item>
+    </style>
+
+    <style name="BottomNavUnselectedTextStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">@dimen/twelve_sp</item>
+    </style>
+
+</resources>
