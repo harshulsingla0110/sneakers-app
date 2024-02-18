@@ -58,6 +58,10 @@ class CheckoutFragment : Fragment(), MyCartListener {
         binding.btnBrowse.setOnClickListener {
             findNavController().navigate(R.id.action_checkoutFragment_to_displayShoesFragment)
         }
+        
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
     }
 

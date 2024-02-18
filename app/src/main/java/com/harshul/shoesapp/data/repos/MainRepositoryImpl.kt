@@ -7,17 +7,33 @@ import androidx.paging.PagingData
 import com.harshul.shoesapp.data.db.ShoeDao
 import com.harshul.shoesapp.data.models.Brand
 import com.harshul.shoesapp.data.models.Shoe
+import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.pagination.ShoesPagingSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import kotlin.random.Random
 
 class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
 
-    override suspend fun shoesApiCall() = withContext(Dispatchers.IO) {
-        val shoesList = shoesDataSource()
-        shoesDAO.insertShoeList(shoesList)
+    override suspend fun shoesApiCall(): UiState<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val shoesList = shoesDataSource()
+            shoesDAO.insertShoeList(shoesList)
+            UiState.Success(Unit)
+        } catch (e: HttpException) {
+            when (e.code()) {
+                400 -> UiState.Error("Invalid query parameter supplied")
+                500 -> UiState.Error("Unexpected error")
+                else -> UiState.Error("Unexpected error, retry after some time")
+            }
+        } catch (e: Exception) {
+            UiState.Error("Network Request failed")
+        }
     }
 
     override fun getShoesPagingData(): Flow<PagingData<Shoe>> = Pager(
@@ -29,6 +45,19 @@ class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
     ) {
         ShoesPagingSource(shoesDAO)
     }.flow
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getShoesQueryData(searchQuery: MutableStateFlow<String>): Flow<PagingData<Shoe>> =
+        searchQuery.flatMapLatest { query ->
+            val newPager = Pager(
+                config = PagingConfig(
+                    pageSize = 2,
+                    enablePlaceholders = false
+                ),
+                pagingSourceFactory = { shoesDAO.searchNotes("%$query%") }
+            )
+            newPager.flow
+        }
 
     override suspend fun addToCart(shoe: Shoe) = withContext(Dispatchers.IO) {
         shoesDAO.updateShoe(shoe)
@@ -57,7 +86,6 @@ private fun shoesDataSource(): MutableList<Shoe> {
         "https://i.ibb.co/r5PVkBb/4-nike.png",
         "https://i.ibb.co/7xc51CH/5-nike.png",
         "https://i.ibb.co/KjTvcS6/17-puma.png",
-        "https://i.ibb.co/v3CSRXy/3-nike.png",
         "https://i.ibb.co/yyTrjDG/7-nike.png",
         "https://i.ibb.co/Pmbbh3p/8-nike.png",
         "https://i.ibb.co/10QjQ4c/21-addidas.png",
@@ -71,6 +99,11 @@ private fun shoesDataSource(): MutableList<Shoe> {
         "https://i.ibb.co/Wyxzwkt/14-nike.png"
     )
 
+    val nameKeywords = listOf(
+        "Boost", "Air", "Max", "Zoom", "Ultra", "Flex", "Elite", "Swift", "Run",
+        "Force", "Tech", "Speed", "Fusion", "Fly", "Lite", "Runner", "Pro", "Blaze", "Wave", "Cloud"
+    )
+
     imagesList.forEachIndexed { index, shoeUrl ->
 
         val shoeBrand = if (shoeUrl.contains("nike")) {
@@ -78,11 +111,14 @@ private fun shoesDataSource(): MutableList<Shoe> {
         } else if (shoeUrl.contains("addidas")) {
             Brand.ADIDAS
         } else Brand.PUMA
+
         val currPrice = (3000..20000).random()
+        val nameKeywordShuffled = nameKeywords.shuffled()
+
         shoesDataList.add(
             Shoe(
                 shoeId = index + 1,
-                name = "${shoeBrand.name} $index",
+                name = "${shoeBrand.brandName} ${nameKeywordShuffled[0]} ${nameKeywordShuffled[1]}",
                 category = (1..3).random(),
                 brand = shoeBrand.id,
                 currPrice = currPrice,

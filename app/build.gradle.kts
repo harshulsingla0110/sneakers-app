@@ -116,4 +116,8 @@ dependencies {
 
     // Pagination
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

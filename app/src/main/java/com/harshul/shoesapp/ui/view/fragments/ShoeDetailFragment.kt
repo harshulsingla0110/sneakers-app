@@ -72,6 +72,10 @@ class ShoeDetailFragment : Fragment() {
                 ShoeDetailFragmentDirections.actionShoeDetailFragmentToCheckoutFragment(buyNowShoe = shoeItem)
             findNavController().navigate(action)
         }
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 }
 

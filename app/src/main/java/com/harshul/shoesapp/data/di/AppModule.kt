@@ -20,7 +20,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRunningDatabase(
+    fun provideShoeDatabase(
         @ApplicationContext app: Context
     ) = Room.databaseBuilder(
         app,
@@ -30,7 +30,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRunDao(db: ShoesDatabase) = db.getShoesDao()
+    fun provideShoeDao(db: ShoesDatabase) = db.getShoesDao()
 
     @Singleton
     @Provides

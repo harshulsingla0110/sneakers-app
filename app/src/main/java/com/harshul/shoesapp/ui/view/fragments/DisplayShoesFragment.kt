@@ -1,10 +1,10 @@
 package com.harshul.shoesapp.ui.view.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harshul.shoesapp.R
 import com.harshul.shoesapp.data.models.Shoe
+import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.pagination.ShoesLoadStateAdapter
 import com.harshul.shoesapp.databinding.FragmentDisplayShoesBinding
 import com.harshul.shoesapp.ui.adapter.ShoeAdapter
@@ -50,19 +51,24 @@ class DisplayShoesFragment : Fragment(), ShoeListener {
         val shoeAdapter = ShoeAdapter(listener = this)
         binding.rvShoes.adapter = shoeAdapter.withLoadStateFooter(ShoesLoadStateAdapter())
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.shoesPagingData.collectLatest {
-                    shoeAdapter.submitData(it)
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Loading -> Unit // Loading state.. show loader
+                is UiState.Success -> Unit // Success state
+                is UiState.Error -> {
+                    //Can show user error message
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-//        lifecycleScope.launch {
-//            viewModel.searchFlow.collectLatest {
-//                shoeAdapter.submitData(it)
-//            }
-//        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchQueryFlow.collectLatest {
+                    shoeAdapter.submitData(it)
+                }
+            }
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
