@@ -1,6 +1,6 @@
 
 # Sneakers App
-This is a Sneakers app developed as part of a technical interview assignment. The app allows users to browse a collection of sneakers, view details about each sneaker, add sneakers to a cart, and view their cart.
+This is a Sneakers app that allows users to browse a collection of sneakers, view details about each sneaker, add sneakers to a cart, and view their cart.
 
 ## Screenshot
 <p align="center">
@@ -9,9 +9,9 @@ This is a Sneakers app developed as part of a technical interview assignment. Th
 
 
  ## About
-- Display a grid of top 100 sneakers with pagination.
-- Sneaker details page showing title, name, image, brand, year of release, and price.
-- Search from sneakers collection.
+- Display a grid of sneakers with pagination.
+- Sneaker details page showing name, image, brand, year of release, and price.
+- Search from the sneakers collection.
 - Add sneakers to cart functionality.
 - Cart page displaying all added sneakers with image and price.
 - Removal of items from the cart.
@@ -39,10 +39,10 @@ com.harshul.shoesapp    # Root Package
 
 ├── data                # For data handling
 │   ├── db              # Local Persistence Database. Room (SQLite) database
-|   │   ├── dao         # Data Access Object for Room  
-|   ├── api             # Retrofit API for remote end point
+|   │   └── dao         # Data Access Object for Room  
+|   ├── api             # Retrofit API for remote endpoint
 │   ├── di              # Dependency Injection
-|   │   ├── module      # DI Modules
+|   │   └── module      # DI Modules
 │   ├── models          # Model classes
 │   ├── pagination      # Pagination source and load adapters
 │   └── repos           # Single source of data
@@ -58,24 +58,24 @@ com.harshul.shoesapp    # Root Package
 ````
 
 ## Assumptions and Decisions
-**Language Choice :**
+**Language Choice:**
  Developed the app using Kotlin as per the preference mentioned in the assignment.
 
-**UI Design :**
+**UI Design:**
  Designed a simple and functional UI with a focus on usability and performance. Used bottom navigation for easy navigation between screens.
 
-**Data Source :**
+**Data Source:**
  Used hardcoded data instead of calling a REST API, as per the assignment instructions.
 
-**Page Size :**
+**Page Size:**
  Set the page size for pagination to 5, considering usability and performance aspects.
 
  ## Test Cases
 
-**Hilt Modules and Dependencies :**
+**Hilt Modules and Dependencies:**
 Included test cases to verify the correctness of Hilt modules and dependencies setup.
 
-**Room Database Operations :**
-Added test cases to ensure that Room database operations such as insertion, retrieval, and deletion are working correctly.
+**Room Database Operations:**
+Added test cases to ensure that Room database operations such as insertion and retrieval are working correctly.
 
 Step up your sneaker game with SneakerShip! 👟✨
