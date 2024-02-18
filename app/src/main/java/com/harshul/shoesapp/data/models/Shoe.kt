@@ -15,5 +15,8 @@ data class Shoe(
     val currPrice: Int,
     val actualPrice: Int,
     val rating: Double,
-    val imageUrl: String
+    val imageUrl: String,
+    val isCartAdded: Boolean = false,
+    val isFavourite: Boolean = false,
+    val year: Int
 ) : Parcelable

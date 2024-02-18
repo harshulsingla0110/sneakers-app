@@ -1,11 +1,21 @@
 package com.harshul.shoesapp.data.repos
 
-import com.harshul.shoesapp.data.db.ShoeDao
+import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
 import com.harshul.shoesapp.data.models.Shoe
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class MainRepository @Inject constructor(private val shoesDAO: ShoeDao) {
+interface MainRepository {
 
-    suspend fun insertShoes(shoesList: List<Shoe>) = shoesDAO.insertShoeList(shoesList)
+    suspend fun shoesApiCall()
 
+    fun getShoesPagingData(): Flow<PagingData<Shoe>>
+
+    suspend fun addToCart(shoe: Shoe)
+
+    suspend fun removeFromCart(shoe: Shoe)
+
+    fun getCartShoes(): LiveData<List<Shoe>>
+
+    fun getShoe(shoeId: Int): LiveData<Shoe>
 }

@@ -2,18 +2,22 @@ package com.harshul.shoesapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.harshul.shoesapp.data.models.Gender
 import com.harshul.shoesapp.data.models.Shoe
-import com.harshul.shoesapp.databinding.ItemShoeBinding
+import com.harshul.shoesapp.databinding.ItemShoeCheckoutBinding
 import com.harshul.shoesapp.utils.formatToIndianCurrency
+import com.harshul.shoesapp.utils.gone
+import com.harshul.shoesapp.utils.visible
 
-class ShoeAdapter(
-    private val listener: ShoeListener
-) : PagingDataAdapter<Shoe, ShoeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class MyCartAdapter(
+    private val listener: MyCartListener
+) : ListAdapter<Shoe, MyCartAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+    private var toShowDeleteButton: Boolean = true
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Shoe>() {
@@ -25,32 +29,42 @@ class ShoeAdapter(
         }
     }
 
-    inner class MyViewHolder(private val binding: ItemShoeBinding) :
+    inner class MyViewHolder(private val binding: ItemShoeCheckoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shoeDetail: Shoe) {
             binding.apply {
                 tvShoeName.text = shoeDetail.name
                 val category = Gender.fromId(shoeDetail.category)
-                tvShoeCategory.text = category.tag
-                tvRating.text = String.format("⭐ %.1f", shoeDetail.rating)
                 tvShoeCurrPrice.text = shoeDetail.currPrice.formatToIndianCurrency()
                 Glide.with(ivShoe.context).load(shoeDetail.imageUrl).into(ivShoe)
 
-                clRoot.setOnClickListener { listener.onShoeClick(shoeDetail) }
+                ivDelete.setOnClickListener { listener.deleteShoe(shoeDetail) }
+
+                if (toShowDeleteButton) {
+                    ivDelete.visible()
+                } else {
+                    ivDelete.gone()
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemShoeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemShoeCheckoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        holder.bind(getItem(position))
     }
+
+    fun hideDeleteButton() {
+        toShowDeleteButton = false
+    }
+
 }
 
-interface ShoeListener {
-    fun onShoeClick(shoeDetail: Shoe)
+interface MyCartListener {
+    fun deleteShoe(shoe: Shoe)
 }

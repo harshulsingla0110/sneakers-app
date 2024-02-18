@@ -4,57 +4,78 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.util.fastSumBy
+import androidx.core.content.ContextCompat.getString
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.harshul.shoesapp.R
+import com.harshul.shoesapp.data.models.Shoe
+import com.harshul.shoesapp.databinding.FragmentCheckoutBinding
+import com.harshul.shoesapp.ui.adapter.MyCartAdapter
+import com.harshul.shoesapp.ui.adapter.MyCartListener
+import com.harshul.shoesapp.ui.view.viewmodel.MainViewModel
+import com.harshul.shoesapp.utils.formatToIndianCurrency
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CheckoutFragment : Fragment(), MyCartListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CheckoutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CheckoutFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentCheckoutBinding
+    private val viewModel: MainViewModel by activityViewModels()
+    private val args: CheckoutFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_checkout, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CheckoutFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CheckoutFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCheckoutBinding.bind(view)
+
+        val adapter = MyCartAdapter(listener = this)
+        binding.rvShoes.adapter = adapter
+
+        args.buyNowShoe?.let {
+            adapter.hideDeleteButton()
+            adapter.submitList(listOf(it))
+            binding.cartFilled(isFromBuyNow = true, grandTotal = it.currPrice)
+        } ?: run {
+            viewModel.getCartShoesData().observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+                val cartSize = it.size
+                if (cartSize == 0) {
+                    binding.cartFilled(isCartFilled = false)
+                } else {
+                    val grandTotal = it.fastSumBy { item -> item.currPrice }
+                    binding.cartFilled(grandTotal = grandTotal)
                 }
             }
+        }
+
+        binding.btnBrowse.setOnClickListener {
+            findNavController().navigate(R.id.action_checkoutFragment_to_displayShoesFragment)
+        }
+
+    }
+
+    override fun deleteShoe(shoe: Shoe) {
+        viewModel.removeFromCart(shoe.copy(isCartAdded = false))
+    }
+
+}
+
+private fun FragmentCheckoutBinding.cartFilled(
+    isCartFilled: Boolean = true, isFromBuyNow: Boolean = false, grandTotal: Int? = null
+) {
+    clFilledCart.visibility = if (isCartFilled) View.VISIBLE else View.GONE
+    clEmptyCart.visibility = if (!isCartFilled) View.VISIBLE else View.GONE
+    tvGrandTotal.text = grandTotal?.formatToIndianCurrency() ?: "-"
+    btnCart.apply {
+        text = getString(
+            context, if (isFromBuyNow) R.string.proceed_to_payment else R.string.proceed_to_checkout
+        )
     }
 }

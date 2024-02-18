@@ -61,19 +61,22 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:padding="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/ivProfilePic"
             app:layout_constraintTop_toBottomOf="@+id/tvFindShoes"
             app:srcCompat="@drawable/ic_search" />
 
-        <EditText
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            android:background="@null"
             android:fontFamily="@font/poppins_medium"
-            android:hint="@string/search"
             android:includeFontPadding="false"
-            android:inputType="text" />
+            android:inputType="text"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="Search shoes" />
 
     </LinearLayout>
 
@@ -95,8 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="8dp"
-        android:clipToPadding="false"
         android:layout_marginTop="8dp"
+        android:clipToPadding="false"
         android:paddingTop="4dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"

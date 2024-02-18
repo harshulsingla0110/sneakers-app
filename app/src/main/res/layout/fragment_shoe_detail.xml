@@ -37,13 +37,13 @@
         app:tint="@color/black" />
 
     <TextView
+        android:id="@+id/tvCartCount"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/bg_rounded"
         android:backgroundTint="@color/main_yellow"
         android:elevation="2dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="3"
         android:textAlignment="center"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/ivCart"
@@ -152,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="6dp"
         android:fontFamily="@font/poppins_medium"
         android:includeFontPadding="false"
         android:textColor="@color/grey_mid_2"
@@ -165,14 +165,25 @@
         android:id="@+id/tvShoeDiscount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="@font/poppins_bold"
         android:includeFontPadding="false"
         android:textColor="@color/red"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvShoeDesc"
+        app:layout_constraintBottom_toTopOf="@+id/tvShoeDate"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="25%OFF" />
+
+    <TextView
+        android:id="@+id/tvShoeDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/dark_grey"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvShoeDesc"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Release Year: 2012" />
 
     <TextView
         android:id="@+id/tvShoeDesc"

@@ -40,3 +40,8 @@ fun TextView.setSpannableTxt(
     spannableString.setSpan(color, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     setText(spannableString)
 }
+
+fun Int.formatToIndianCurrency(): String {
+    val formatter = java.text.DecimalFormat("##,##,###")
+    return "₹${formatter.format(this)}"
+}

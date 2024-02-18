@@ -1,12 +1,16 @@
 package com.harshul.shoesapp.ui.view.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harshul.shoesapp.R
 import com.harshul.shoesapp.data.models.Shoe
@@ -25,7 +29,7 @@ import kotlinx.coroutines.launch
 class DisplayShoesFragment : Fragment(), ShoeListener {
 
     private lateinit var binding: FragmentDisplayShoesBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,16 +51,35 @@ class DisplayShoesFragment : Fragment(), ShoeListener {
         binding.rvShoes.adapter = shoeAdapter.withLoadStateFooter(ShoesLoadStateAdapter())
 
         lifecycleScope.launch {
-            viewModel.data.collectLatest {
-                shoeAdapter.submitData(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.shoesPagingData.collectLatest {
+                    shoeAdapter.submitData(it)
+                }
             }
         }
+
+//        lifecycleScope.launch {
+//            viewModel.searchFlow.collectLatest {
+//                shoeAdapter.submitData(it)
+//            }
+//        }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { viewModel.searchQuery.value = it }
+                return true
+            }
+        })
 
     }
 
     override fun onShoeClick(shoeDetail: Shoe) {
         val action =
-            DisplayShoesFragmentDirections.actionDisplayShoesFragmentToShoeDetailFragment(shoeDetail)
+            DisplayShoesFragmentDirections.actionDisplayShoesFragmentToShoeDetailFragment(shoeDetail.shoeId)
         findNavController().navigate(action)
     }
 

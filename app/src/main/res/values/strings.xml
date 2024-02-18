@@ -11,5 +11,14 @@
     <string name="favourites">Favourites</string>
     <string name="buy_now">Buy Now</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="view_cart">View Cart</string>
     <string name="shoe_detail_desc">The Air Jordan 1 Mid is a classic sneaker silhouette that offers a timeless blend of style and comfort.</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="my_cart">My Cart</string>
+    <string name="cart_tagline">Step up your style! Browse our collection and add some sole to your cart with our trendy shoes today</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="browse">Browse</string>
+    <string name="proceed_to_payment">Proceed to Payment</string>
+    <string name="release_year">Release Year: %1$d</string>
+    <string name="discount_perc_off">%1$s%%OFF</string>
 </resources>
