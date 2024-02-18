@@ -14,6 +14,7 @@
         android:layout_margin="16dp"
         android:fontFamily="@font/poppins_bold"
         android:text=""
+        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,14 +46,13 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_rounded"
         android:backgroundTint="@color/light_grey"
-        app:layout_constraintBottom_toBottomOf="@+id/ivFilter"
         app:layout_constraintEnd_toStartOf="@+id/ivFilter"
         app:layout_constraintStart_toStartOf="@+id/tvFindShoes"
-        app:layout_constraintTop_toTopOf="@+id/ivFilter">
+        app:layout_constraintTop_toBottomOf="@+id/tvFindShoes">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/appCompatImageView"
@@ -88,6 +88,7 @@
         android:background="@drawable/bg_rounded"
         android:backgroundTint="@color/main_orange"
         android:padding="12dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/ivProfilePic"
         app:layout_constraintTop_toBottomOf="@+id/tvFindShoes"
         app:srcCompat="@drawable/ic_filter"

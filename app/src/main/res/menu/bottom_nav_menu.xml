@@ -11,9 +11,9 @@
         android:icon="@drawable/cart_selector"
         android:title="@string/cart" />
 
-    <item
-        android:id="@+id/favouriteShoesFragment"
-        android:icon="@drawable/favourite_selector"
-        android:title="@string/favourites" />
+<!--    <item-->
+<!--        android:id="@+id/favouriteShoesFragment"-->
+<!--        android:icon="@drawable/favourite_selector"-->
+<!--        android:title="@string/favourites" />-->
 
 </menu>

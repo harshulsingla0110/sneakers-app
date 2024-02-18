@@ -51,7 +51,7 @@ class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
         searchQuery.flatMapLatest { query ->
             val newPager = Pager(
                 config = PagingConfig(
-                    pageSize = 2,
+                    pageSize = 5,
                     enablePlaceholders = false
                 ),
                 pagingSourceFactory = { shoesDAO.searchNotes("%$query%") }

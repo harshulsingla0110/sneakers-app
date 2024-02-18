@@ -21,7 +21,6 @@ import com.harshul.shoesapp.ui.adapter.ShoeAdapter
 import com.harshul.shoesapp.ui.adapter.ShoeListener
 import com.harshul.shoesapp.ui.view.viewmodel.MainViewModel
 import com.harshul.shoesapp.utils.lightTheme
-import com.harshul.shoesapp.utils.setSpannableTxt
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -46,7 +45,7 @@ class DisplayShoesFragment : Fragment(), ShoeListener {
         binding = FragmentDisplayShoesBinding.bind(view)
 
         requireActivity().lightTheme()
-        binding.tvName.setSpannableTxt(getString(R.string.hello), R.color.light_grey, 4, 7)
+        binding.tvName.text = getString(R.string.hello)
 
         val shoeAdapter = ShoeAdapter(listener = this)
         binding.rvShoes.adapter = shoeAdapter.withLoadStateFooter(ShoesLoadStateAdapter())

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ShoesApp</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="intro_screen_details_str">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id egestas purus. Suspendisse tincidunt nulla.</string>
-    <string name="hello">Hi, Joe! 👋</string>
+    <string name="intro_screen_details_str">Step into the future of comfort and performance with Dynamic Running Shoes – Where Every Stride Tells Your Story.</string>
+    <string name="hello">Hi, Harshul! 👋</string>
     <string name="find_best_shoes">Find Your Best Shoes Here</string>
     <string name="search">Search</string>
     <string name="home">Home</string>

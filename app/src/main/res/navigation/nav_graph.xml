@@ -47,7 +47,9 @@
         tools:layout="@layout/fragment_checkout" >
         <action
             android:id="@+id/action_checkoutFragment_to_displayShoesFragment"
-            app:destination="@id/displayShoesFragment" />
+            app:destination="@id/displayShoesFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/displayShoesFragment" />
         <argument
             android:name="buyNowShoe"
             app:argType="com.harshul.shoesapp.data.models.Shoe"
