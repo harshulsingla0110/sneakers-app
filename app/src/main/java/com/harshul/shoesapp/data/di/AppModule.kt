@@ -2,10 +2,7 @@ package com.harshul.shoesapp.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.harshul.shoesapp.data.db.ShoeDao
 import com.harshul.shoesapp.data.db.ShoesDatabase
-import com.harshul.shoesapp.data.repos.MainRepository
-import com.harshul.shoesapp.data.repos.MainRepositoryImpl
 import com.harshul.shoesapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -32,9 +29,4 @@ object AppModule {
     @Provides
     fun provideShoeDao(db: ShoesDatabase) = db.getShoesDao()
 
-    @Singleton
-    @Provides
-    fun provideRepository(
-        shoeDao: ShoeDao
-    ): MainRepository = MainRepositoryImpl(shoeDao)
 }

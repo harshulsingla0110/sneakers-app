@@ -18,6 +18,9 @@ interface ShoeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShoe(shoe: Shoe)
 
+    @Query("SELECT * FROM shoes")
+    fun getAllShoes() : LiveData<List<Shoe>>
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateShoe(shoe: Shoe)
 
