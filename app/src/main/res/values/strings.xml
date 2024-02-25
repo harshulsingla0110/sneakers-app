@@ -20,4 +20,5 @@
     <string name="proceed_to_payment">Proceed to Payment</string>
     <string name="release_year">Release Year: %1$d</string>
     <string name="discount_perc_off">%1$s%%OFF</string>
+    <string name="sort_by">Sort By</string>
 </resources>

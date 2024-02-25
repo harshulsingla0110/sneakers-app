@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.harshul.shoesapp.R
 import com.harshul.shoesapp.data.models.Shoe
+import com.harshul.shoesapp.data.models.SortBy
 import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.pagination.ShoesLoadStateAdapter
 import com.harshul.shoesapp.databinding.FragmentDisplayShoesBinding
@@ -75,16 +77,27 @@ class DisplayShoesFragment : Fragment(), ShoeListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { viewModel.searchQuery.value = it }
+                val queryParam = viewModel.queryParam.value
+                newText?.let { viewModel.queryParam.value = queryParam.copy(searchQuery = it) }
                 return true
             }
         })
 
+        binding.ivSort.setOnClickListener {
+            val action = DisplayShoesFragmentDirections.actionDisplayShoesFragmentToSortByBottomSheet(viewModel.queryParam.value.sortBy)
+            findNavController().navigate(action)
+        }
+
+        setFragmentResultListener(SortByBottomSheet.SORT_KEY) { _, bundle ->
+            val sortBy = bundle.get(SortByBottomSheet.SORT_BY) as SortBy
+            val queryParam = viewModel.queryParam.value
+            viewModel.queryParam.value = queryParam.copy(sortBy = sortBy)
+        }
+
     }
 
     override fun onShoeClick(shoeDetail: Shoe) {
-        val action =
-            DisplayShoesFragmentDirections.actionDisplayShoesFragmentToShoeDetailFragment(shoeDetail.shoeId)
+        val action = DisplayShoesFragmentDirections.actionDisplayShoesFragmentToShoeDetailFragment(shoeDetail.shoeId)
         findNavController().navigate(action)
     }
 

@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_displayShoesFragment_to_checkoutFragment"
             app:destination="@id/checkoutFragment" />
+        <action
+            android:id="@+id/action_displayShoesFragment_to_sortByBottomSheet"
+            app:destination="@id/sortByBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/shoeDetailFragment"
@@ -65,4 +68,12 @@
             android:id="@+id/action_favouriteShoesFragment_to_shoeDetailFragment"
             app:destination="@id/shoeDetailFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/sortByBottomSheet"
+        android:name="com.harshul.shoesapp.ui.view.fragments.SortByBottomSheet"
+        android:label="SortByBottomSheet" >
+        <argument
+            android:name="sortBy"
+            app:argType="com.harshul.shoesapp.data.models.SortBy" />
+    </dialog>
 </navigation>

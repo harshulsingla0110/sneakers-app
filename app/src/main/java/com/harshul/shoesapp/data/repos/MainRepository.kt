@@ -2,6 +2,7 @@ package com.harshul.shoesapp.data.repos
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
+import com.harshul.shoesapp.data.models.QueryParams
 import com.harshul.shoesapp.data.models.Shoe
 import com.harshul.shoesapp.data.models.UiState
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ interface MainRepository {
 
     fun getShoesPagingData(): Flow<PagingData<Shoe>>
 
-    fun getShoesQueryData(searchQuery: MutableStateFlow<String>): Flow<PagingData<Shoe>>
+    fun getShoesQueryData(queryParam: MutableStateFlow<QueryParams>): Flow<PagingData<Shoe>>
 
     suspend fun addToCart(shoe: Shoe)
 

@@ -6,7 +6,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.harshul.shoesapp.data.models.Shoe
 
 @Dao
@@ -29,6 +31,9 @@ interface ShoeDao {
 
     @Query("SELECT * FROM shoes WHERE name LIKE :query ORDER BY name ASC")
     fun searchNotes(query: String): PagingSource<Int, Shoe>
+
+    @RawQuery(observedEntities = [Shoe::class])
+    fun rawQuery(query: SimpleSQLiteQuery): PagingSource<Int, Shoe>
 
     @Query("SELECT * FROM shoes WHERE shoeId = :shoeId")
     fun getShoes(shoeId: Int): LiveData<Shoe>

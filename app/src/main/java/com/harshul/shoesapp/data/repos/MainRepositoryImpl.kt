@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.harshul.shoesapp.data.db.ShoeDao
 import com.harshul.shoesapp.data.models.Brand
+import com.harshul.shoesapp.data.models.QueryParams
 import com.harshul.shoesapp.data.models.Shoe
 import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.pagination.ShoesPagingSource
@@ -47,15 +49,19 @@ class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
     }.flow
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getShoesQueryData(searchQuery: MutableStateFlow<String>): Flow<PagingData<Shoe>> =
-        searchQuery.flatMapLatest { query ->
+    override fun getShoesQueryData(queryParam: MutableStateFlow<QueryParams>): Flow<PagingData<Shoe>> =
+        queryParam.flatMapLatest { query ->
             val newPager = Pager(
                 config = PagingConfig(
                     pageSize = 5,
                     enablePlaceholders = false
-                ),
-                pagingSourceFactory = { shoesDAO.searchNotes("%$query%") }
-            )
+                )
+            ) {
+                val queryString = "SELECT * FROM shoes WHERE name LIKE '%${query.searchQuery}%' ORDER BY ${query.sortBy.notation}"
+                val rawQuery = SimpleSQLiteQuery(queryString)
+                shoesDAO.rawQuery(rawQuery)
+//                shoesDAO.searchNotes(query = "%${query.searchQuery}%")
+            }
             newPager.flow
         }
 

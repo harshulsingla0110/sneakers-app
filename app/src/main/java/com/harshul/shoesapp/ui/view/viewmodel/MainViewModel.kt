@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.harshul.shoesapp.data.models.QueryParams
 import com.harshul.shoesapp.data.models.Shoe
 import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.repos.MainRepository
@@ -28,8 +29,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    val searchQuery = MutableStateFlow("")
-    val searchQueryFlow = repository.getShoesQueryData(searchQuery).cachedIn(viewModelScope)
+    val queryParam = MutableStateFlow(QueryParams())
+    val searchQueryFlow = repository.getShoesQueryData(queryParam).cachedIn(viewModelScope)
 
     fun addToCart(shoe: Shoe) {
         viewModelScope.launch {
