@@ -30,7 +30,7 @@ interface ShoeDao {
     suspend fun getPagedList(limit: Int, offset: Int): List<Shoe>
 
     @Query("SELECT * FROM shoes WHERE name LIKE :query ORDER BY name ASC")
-    fun searchNotes(query: String): PagingSource<Int, Shoe>
+    fun searchShoes(query: String): PagingSource<Int, Shoe>
 
     @RawQuery(observedEntities = [Shoe::class])
     fun rawQuery(query: SimpleSQLiteQuery): PagingSource<Int, Shoe>

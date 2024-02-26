@@ -3,6 +3,7 @@ package com.harshul.shoesapp.data.di
 import com.harshul.shoesapp.data.db.ShoeDao
 import com.harshul.shoesapp.data.repos.MainRepository
 import com.harshul.shoesapp.data.repos.MainRepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,12 +12,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RepositoryModule {
+abstract class RepositoryModule {
 
     @Singleton
-    @Provides
-    fun provideRepository(
-        shoeDao: ShoeDao
-    ): MainRepository = MainRepositoryImpl(shoeDao)
+    @Binds
+    abstract fun provideRepository(mainRepositoryImpl: MainRepositoryImpl): MainRepository
 
 }

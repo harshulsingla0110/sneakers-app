@@ -11,6 +11,8 @@ import com.harshul.shoesapp.data.models.QueryParams
 import com.harshul.shoesapp.data.models.Shoe
 import com.harshul.shoesapp.data.models.UiState
 import com.harshul.shoesapp.data.pagination.ShoesPagingSource
+import com.harshul.shoesapp.utils.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +20,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import javax.inject.Inject
 import kotlin.random.Random
 
-class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
+class MainRepositoryImpl @Inject constructor(
+    private val shoesDAO: ShoeDao,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : MainRepository {
 
-    override suspend fun shoesApiCall(): UiState<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun shoesApiCall(): UiState<Unit> = withContext(ioDispatcher) {
         try {
             val shoesList = shoesDataSource()
             shoesDAO.insertShoeList(shoesList)
@@ -57,7 +63,8 @@ class MainRepositoryImpl(private val shoesDAO: ShoeDao) : MainRepository {
                     enablePlaceholders = false
                 )
             ) {
-                val queryString = "SELECT * FROM shoes WHERE name LIKE '%${query.searchQuery}%' ORDER BY ${query.sortBy.notation}"
+                val queryString =
+                    "SELECT * FROM shoes WHERE name LIKE '%${query.searchQuery}%' ORDER BY ${query.sortBy.notation}"
                 val rawQuery = SimpleSQLiteQuery(queryString)
                 shoesDAO.rawQuery(rawQuery)
 //                shoesDAO.searchNotes(query = "%${query.searchQuery}%")

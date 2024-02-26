@@ -10,7 +10,9 @@ enum class Brand(val id: Int,val brandName: String, @DrawableRes val logo: Int, 
 
     companion object {
         fun fromId(id: Int): Brand {
-            return entries.find { it.id == id } ?: NIKE
+            return entries.find { it.id == id } ?: run {
+                throw IllegalArgumentException("No value matching supplied id = $id")
+            }
         }
 
         init {

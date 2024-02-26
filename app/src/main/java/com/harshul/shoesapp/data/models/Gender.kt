@@ -7,13 +7,15 @@ enum class Gender(val id: Int, val tag: String) {
 
     companion object {
         fun fromId(id: Int): Gender {
-            return entries.find { it.id == id } ?: UNISEX
+            return entries.find { it.id == id } ?: run {
+                throw IllegalArgumentException("No value matching supplied id = $id")
+            }
         }
 
         init {
             val ids = entries.map { it.id }
             if (ids.size != ids.toSet().size) {
-                throw IllegalArgumentException("Duplicate IDs are not allowed in Brand enum")
+                throw IllegalArgumentException("Duplicate IDs are not allowed in Gender enum")
             }
         }
     }
